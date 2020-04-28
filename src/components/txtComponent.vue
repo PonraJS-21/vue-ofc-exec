@@ -11,14 +11,16 @@
         type="text"
         v-bind:id="data.trim().toLowerCase()"
         v-model="strObj[i]"
-        v-bind:placeholder="data"
+        v-bind:placeholder="data.trim()"
       />
     </div>
     <div v-if="!notSet">
       <input type="text" v-on:input="searchData" placeholder="search" />
     </div>
 
-    <ol v-for="(filtredData,i) in filteredData" :key="'a'+i" v-bind:index="i">{{filtredData}}</ol>
+    <ol v-for="(filtredData,i) in filteredData" :key="'a'+i" v-bind:index="i">
+      <li>{{filtredData}}</li>
+    </ol>
 
     <div id="extra-component">
       <button v-on:click="setData">Set</button>
@@ -85,7 +87,17 @@ ul {
 }
 li {
   display: inline-block;
-  margin: 0 10px;
+  position: relative;
+  left: -20px;
+  top: -15px;
+  border: 1px solid grey;
+  background-color: rgb(251, 253, 255);
+  width: 200px;
+  text-align: left;
+  overflow: hidden;
+}
+input[type="text"] {
+  width: 200px;
 }
 a {
   color: #42b983;
