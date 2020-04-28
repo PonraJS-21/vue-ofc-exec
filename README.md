@@ -1,2 +1,2 @@
-![VUE JS](https://img.favpng.com/7/5/12/vue-js-javascript-library-angularjs-png-favpng-FinEv5smDSL4P0bd3TcdtmsxW.jpg)
+![VUE JS](https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Vue.js_Logo_2.svg/555px-Vue.js_Logo_2.svg.png)
 <ht> Vue js component creation </h1>
