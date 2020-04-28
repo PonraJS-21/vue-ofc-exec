@@ -1,1 +1,1 @@
-Vue js componet creation
+Vue js component creation
