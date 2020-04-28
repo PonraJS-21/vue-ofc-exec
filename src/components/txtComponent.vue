@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>{{ msg }}</h1>
+    <!-- Displaying initial textboxes -->
     <div
       v-for="(data,i) in usrData.split(',')"
       :key="data+i"
@@ -14,18 +15,19 @@
         v-bind:placeholder="data.trim()"
       />
     </div>
+    <!-- Set button -->
+    <div id="extra-component">
+      <button v-on:click="setData">Set</button>
+    </div>
+    <!-- search input field display none initially -->
     <div v-if="!notSet">
       <input type="text" id="search-box" v-on:input="searchData" placeholder="search" />
     </div>
-
+    <!-- search result list -->
     <div id="master-list">
       <ol v-for="(filtredData,i) in filteredData" :key="'a'+i">
         <li v-on:click="setClickedValue">{{filtredData}}</li>
       </ol>
-    </div>
-
-    <div id="extra-component">
-      <button v-on:click="setData">Set</button>
     </div>
   </div>
 </template>
@@ -97,7 +99,7 @@ li {
   display: block;
   position: relative;
   left: -20px;
-  top: -15px;
+  top: -10px;
   border: 1px solid grey;
   background-color: rgb(251, 253, 255);
   width: 200px;
@@ -114,5 +116,8 @@ a {
 }
 div {
   margin: 10px;
+}
+ol {
+  margin: 0px;
 }
 </style>
