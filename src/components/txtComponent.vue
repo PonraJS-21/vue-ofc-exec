@@ -15,12 +15,14 @@
       />
     </div>
     <div v-if="!notSet">
-      <input type="text" v-on:input="searchData" placeholder="search" />
+      <input type="text" id="search-box" v-on:input="searchData" placeholder="search" />
     </div>
 
-    <ol v-for="(filtredData,i) in filteredData" :key="'a'+i" v-bind:index="i">
-      <li>{{filtredData}}</li>
-    </ol>
+    <div id="master-list">
+      <ol v-for="(filtredData,i) in filteredData" :key="'a'+i">
+        <li v-on:click="setClickedValue">{{filtredData}}</li>
+      </ol>
+    </div>
 
     <div id="extra-component">
       <button v-on:click="setData">Set</button>
@@ -65,12 +67,18 @@ export default {
       if (this.notSet) return;
 
       this.filteredData = [];
+      document.getElementById("master-list").style.display = "block";
       var searchInput = event.target.value,
         foundItem = DB.filter(item => {
           return item.includes(searchInput) && searchInput.trim() != "";
         });
 
       this.filteredData = foundItem;
+    },
+    setClickedValue: function() {
+      var value = event.target.innerText;
+      document.getElementById("search-box").value = value;
+      document.getElementById("master-list").style.display = "none";
     }
   }
 };
@@ -86,7 +94,7 @@ ul {
   padding: 0;
 }
 li {
-  display: inline-block;
+  display: block;
   position: relative;
   left: -20px;
   top: -15px;
@@ -95,6 +103,8 @@ li {
   width: 200px;
   text-align: left;
   overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
 }
 input[type="text"] {
   width: 200px;
