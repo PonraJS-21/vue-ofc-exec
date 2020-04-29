@@ -3,7 +3,7 @@
     <h1>{{ msg }}</h1>
     <!-- Displaying initial textboxes -->
     <div
-      v-for="(data,i) in usrData.split(',')"
+      v-for="(data,i) in usrData.split(' ')"
       :key="data+i"
       v-bind:index="i"
       v-bind:style="styleObj"
@@ -21,12 +21,26 @@
     </div>
     <!-- search input field display none initially -->
     <div v-if="!notSet">
-      <input type="text" id="search-box" v-on:input="searchData" placeholder="search" />
+      <input
+        type="text"
+        id="search-box"
+        v-on:input="searchData"
+        placeholder="search"
+        v-on:keydown="keyDown"
+      />
     </div>
     <!-- search result list -->
     <div id="master-list">
-      <ol v-for="(filtredData,i) in filteredData" :key="'a'+i">
-        <li v-on:click="setClickedValue">{{filtredData}}</li>
+      <ol id="u-order-list">
+        <li
+          v-for="(filtredData,i) in filteredData"
+          :key="'a'+i"
+          tabindex="-1"
+          class="list-element"
+          v-on:click="setClickedValue"
+          v-on:keyup="setClickedValue"
+          v-on:keydown="keyDown"
+        >{{filtredData}}</li>
       </ol>
     </div>
   </div>
@@ -47,15 +61,14 @@ export default {
       styleObj: {
         display: "block"
       },
-      notSet: true
+      notSet: true,
+      currListIndex: -1
     };
   },
   methods: {
     setData: function() {
-      console.log("Set method");
       this.notSet = false;
       DB = this.strObj;
-      console.log("DB: ", DB);
 
       //Hide old values
       document.getElementById("extra-component").style.display = "none";
@@ -66,8 +79,6 @@ export default {
       });
     },
     searchData: function() {
-      if (this.notSet) return;
-
       this.filteredData = [];
       document.getElementById("master-list").style.display = "block";
       var searchInput = event.target.value,
@@ -79,8 +90,38 @@ export default {
     },
     setClickedValue: function() {
       var value = event.target.innerText;
-      document.getElementById("search-box").value = value;
-      document.getElementById("master-list").style.display = "none";
+      if (event.keyCode === 13 || event.type === "click") {
+        //Resetting li focus index
+        this.currListIndex = -1;
+        //Set search box value
+        document.getElementById("search-box").value = value;
+        document.getElementById("master-list").style.display = "none";
+      }
+    },
+    keyDown: function() {
+      try {
+        var ul = document.getElementById("u-order-list");
+        var maxListLength = ul.childNodes.length;
+
+        //Arrow down event
+        if (
+          event.code === "ArrowDown" &&
+          this.currListIndex < maxListLength - 1
+        ) {
+          this.currListIndex = this.currListIndex + 1;
+          this.setFocus(this.currListIndex, ul);
+        } else if (event.code === "ArrowUp" && this.currListIndex > 0) {
+          //Arrow Up event
+          this.currListIndex = this.currListIndex - 1;
+          this.setFocus(this.currListIndex, ul);
+        }
+      } catch (error) {
+        //empty
+      }
+    },
+    setFocus: function(focusIndex, ul) {
+      var child = ul.childNodes[focusIndex];
+      child.focus();
     }
   }
 };
@@ -100,16 +141,21 @@ li {
   position: relative;
   left: -20px;
   top: -10px;
-  border: 1px solid grey;
-  background-color: rgb(251, 253, 255);
-  width: 200px;
+  border: 0.5px solid #41b883;
   text-align: left;
   overflow: hidden;
   margin-left: auto;
   margin-right: auto;
 }
-input[type="text"] {
+input[type="text"],
+li {
   width: 200px;
+  padding: 5px;
+  font-size: 15px;
+  border: 1px solid #35495e;
+}
+input[type="text"] {
+  outline: none;
 }
 a {
   color: #42b983;
@@ -119,5 +165,21 @@ div {
 }
 ol {
   margin: 0px;
+}
+button {
+  background-color: #41b883;
+  padding: 5px;
+  color: white;
+  width: 60px;
+  border-radius: 4px;
+  border: none;
+}
+li:focus,
+li:hover {
+  background-color: #41b883;
+  color: white;
+}
+li:focus {
+  border: 2px solid #35495e;
 }
 </style>
